@@ -1,0 +1,9 @@
+[package]
+
+name = "filter_duplicates"
+version = "0.2.0"
+authors = ["Vasya Novikov <n1dr+cm3513github@ya.ru>"]
+
+[[bin]]
+
+name = "filter_duplicates"
