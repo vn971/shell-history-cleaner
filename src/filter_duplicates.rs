@@ -1,5 +1,5 @@
 #!/bin/sh -eu
-#![allow(unused_attribute)] /*
+#![allow(unused_attributes)] /*
 binName="`basename "$0" .rs`"
 if [ ! "$binName" -nt "$0" ]; then
     rustc "$0"
@@ -53,5 +53,5 @@ impl<T> OptionFlatMap<T> for Option<T> {
 // Bash invokes compiling if neccessary,
 // Rust does the real task of the script.
 //
-// This way of launching a script also keeps the command-line arguments,
+// This way of launching a script also keeps command-line arguments,
 // although we ignore them in our Rust code.
