@@ -1,9 +1,18 @@
 [package]
-
 name = "filter_duplicates"
-version = "0.2.0"
-authors = ["Vasya Novikov <n1dr+cm3513github@ya.ru>"]
+version = "0.3.0"
+description = "Clean your bash/shell history"
+authors = ["Vasya Novikov <n1dr+cm3513git@ya.ru>"]
+license="GPL-3.0-or-later"
+edition="2021"
+readme = "README.md"
+keywords = ["shell", "bash", "cli"]
 
-[[bin]]
+[dependencies]
+lazy_static = "1.4.0"
+regex = "1.5.4"
+libc = "0.2"
+nix = "0.23.1"
 
-name = "filter_duplicates"
+[profile.release]
+lto = true
