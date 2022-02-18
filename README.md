@@ -27,7 +27,7 @@ OPTIONS:
     -d, --dedup
             De-duplicate lines to only keep one last occurrence of each dup.
 
-        --remove <REMOVE>
+    -r, --remove <REMOVE>
             Lines to remove. For example, 'yt-dlp.*' will remove lines starting with 'yt-dlp'.
             Can be specified multiple times.
             
