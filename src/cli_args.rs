@@ -17,6 +17,7 @@ pub struct CliArgs {
     pub dedup: bool,
 
     #[structopt(
+        short = 'r',
         long = "remove",
         help = "Lines to remove. For example, 'yt-dlp.*' will remove lines starting with 'yt-dlp'.{n}\
             Can be specified multiple times.{n}{n}\
