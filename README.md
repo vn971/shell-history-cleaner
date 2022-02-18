@@ -25,7 +25,9 @@ ARGS:
 
 OPTIONS:
     -d, --dedup
-            De-duplicate lines to only keep one last occurrence of each dup.
+            De-duplicate lines to only keep one last occurrence of each dup. In contrast to bash
+            built-in deduplication, this also works if the duplicates are sparse and do not
+            immediately follow each other.
 
     -r, --remove <REMOVE>
             Lines to remove. For example, 'yt-dlp.*' will remove lines starting with 'yt-dlp'.
