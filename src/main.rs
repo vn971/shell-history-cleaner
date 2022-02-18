@@ -1,46 +1,43 @@
 #[global_allocator]
 static GLOBAL: std::alloc::System = std::alloc::System;
 
+mod cli_args;
+
+use crate::cli_args::CliArgs;
+use clap::Parser;
 use regex::Regex;
 use std::collections::HashMap;
-use std::path::Path;
+use std::path::PathBuf;
 use std::time::SystemTime;
 
-const DEFAULT_REGEXP: &str = "^(dict.*|sdcv .*| .*|git checkout .*|git branch .*|ps aux.*|youtube-dl .*|yt-dlp .*|chmod.*|echo.*|man .*)$";
-const DEFAULT_MAXIMUM_OCCURRENCES: u32 = 3;
-
-fn print_usage() {
-    eprintln!("This program mutates a file to remove duplicate lines. Example usage:");
-    eprintln!("    $0 \"$HISTFILE\"");
-}
-
 fn main() {
-    let args: Vec<String> = std::env::args().collect();
-    let target_file_name = match args.as_slice() {
-        [_, t] => t.to_string(),
-        _ => {
-            eprintln!("ERROR: expected exactly one command-line argument.");
-            print_usage();
-            std::process::exit(1)
-        }
-    };
-    let target_file = Path::new(&target_file_name);
-    let ignore_regex = std::env::var("ignore_regexp")
-        .ok()
-        .unwrap_or_else(|| DEFAULT_REGEXP.to_string());
-    let ignore_regex: Regex = Regex::new(&ignore_regex).unwrap();
+    let cli_args: CliArgs = Parser::parse();
+    let target_file: PathBuf = cli_args.target_file.clone();
+    let target_file_name = target_file.to_str().unwrap_or_else(|| {
+        panic!(
+            "Error converting target file path to UTF-8: {:?}",
+            target_file
+        )
+    });
 
-    let maximum_occurrences = std::env::var("maximum_occurrences")
-        .ok()
-        .and_then(|s| s.parse::<u32>().ok())
-        .unwrap_or_else(|| DEFAULT_MAXIMUM_OCCURRENCES);
+    let mut remove_regexes = Vec::new();
+    for remove_string in &cli_args.remove {
+        match Regex::new(&format!("^{}$", remove_string)) {
+            Err(err) => panic!(
+                "Failed to interpret --remove pattern {} as a regular expression, {}",
+                remove_string, err
+            ),
+            Ok(re) => remove_regexes.push(re),
+        }
+    }
 
     let file_as_string = std::fs::read_to_string(&target_file)
-        .unwrap_or_else(|err| panic!("Failed to read file, {}", err));
+        .unwrap_or_else(|err| panic!("Failed to read target file {}, {}", target_file_name, err));
 
     let mut map: HashMap<String, u32> = HashMap::new();
     let mut output: Vec<String> = Vec::new();
-    let mut lines_ignored: u32 = 0;
+    let mut lines_removed: u32 = 0;
+    let mut lines_dedupplicated: u32 = 0;
 
     for line in file_as_string.lines().rev() {
         let (line_copy, value) = if let Some(old_key_value) = map.remove_entry(line) {
@@ -48,10 +45,12 @@ fn main() {
         } else {
             (line.to_string(), 0)
         };
-        if value < maximum_occurrences && !ignore_regex.is_match(line) {
-            output.push(line.to_string());
+        if cli_args.dedup && value >= 1 {
+            lines_dedupplicated += 1;
+        } else if remove_regexes.iter().any(|r| r.is_match(line)) {
+            lines_removed += 1;
         } else {
-            lines_ignored += 1;
+            output.push(line.to_string());
         }
         map.insert(line_copy, value + 1);
     }
@@ -80,6 +79,11 @@ fn main() {
             backup_file, target_file_name, err
         )
     });
-    eprintln!("Success! Removed {} lines and kept {}", lines_ignored, output.len());
+    eprintln!(
+        "Success! Deduplicated {} lines, removed {} and kept {}",
+        lines_dedupplicated,
+        lines_removed,
+        output.len()
+    );
     eprintln!("Original file backed up to {}", backup_file);
 }

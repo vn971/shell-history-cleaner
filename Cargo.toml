@@ -1,5 +1,5 @@
 [package]
-name = "filter_duplicates"
+name = "shell-history-cleaner"
 version = "0.3.0"
 description = "Clean your bash/shell history"
 authors = ["Vasya Novikov <n1dr+cm3513git@ya.ru>"]
@@ -11,7 +11,7 @@ keywords = ["shell", "bash", "cli"]
 [dependencies]
 lazy_static = "1.4.0"
 regex = "1.5.4"
-structopt = "0.3.26"
+clap = { version = "3.0", features = ["derive"] }
 
 [profile.release]
 lto = true

@@ -1,51 +1,54 @@
 # About
-Shell History Cleaner is a program that cleans up the shell history for you.
+Shell History Cleaner is a simple program that cleans the bash/shell history for you.
 
 Shell history is the commands that you see when pressing `Up` or `Ctrl R` (to search) in the terminal.
 
+
 # Use
+Install Rust/cargo. After that:
 ```sh
 cargo install --force shell-history-cleaner
-shell-history-cleaner --dedup 1  # de-duplicates your shell history
-```
-For more examples and options, see below
 
-# Example
-Suppose you have a huge HISTFILE, such as:
-```sh
-...
-git status
-git checkout -b branchname
-...
-git status
-yt-dlp 'https://youtube.com/video....'
-yt-dlp 'https://youtube.com/video2....'
-yt-dlp 'https://youtube.com/video3....'
-...
-git status
+shell-history-cleaner --dedup "$HISTFILE"  # remove duplicates
+shell-history-cleaner --dedup --remove 'youtube-dl .*' "$HISTFILE"  # also remove video downloads
 ```
 
-You want to clean it, to make navigation with `Ctrl R` easier:
 
-* Remove all `yt-dlp` commands (the youtube video downloader)
-* Keep a maximum of 1000 last `git checkout` commands
-* De-duplicate entries to only keep the one last occurrence of each dup
+# Help
+```
+USAGE:
+    shell-history-cleaner [OPTIONS] <TARGET_FILE>
 
-To do that, run:
-```sh
-shell_history_cleaner --dedup=1 --ignore='yt-dlp .*' --limit=1000:'curl .*'
+ARGS:
+    <TARGET_FILE>
+            Target file to clean. You can use "$HISTFILE" to clean up the shell history.
+
+OPTIONS:
+    -d, --dedup
+            De-duplicate lines to only keep one last occurrence of each dup.
+
+        --remove <REMOVE>
+            Lines to remove. For example, 'yt-dlp.*' will remove lines starting with 'yt-dlp'.
+            Can be specified multiple times.
+            
+            The patterns are regular expressions, assuming the whole line is matched, as defined
+            here: https://docs.rs/regex/latest/regex/#syntax
+            
+            Another real-life example:
+            '(ps aux.*|git checkout .*|git branch .*| .*|yt-dlp .*|chmod .*|echo .*|man .*)'
+
+    -h, --help
+            Print help information
 ```
 
-# Manual
-```txt
-TODO
-```
 
 # Useful references
-* Make your bash history unlimited: https://superuser.com/a/664061/162466
+* Make your bash history unlimited: [https://superuser.com/a/664061/162466](https://superuser.com/a/664061/162466)
+
 
 # Implementation details
-This program loads the whole contents of the file in memory. Don't use this script if your history file is 1Gb (hope not though :shrug:)
+This program loads the file contents in memory. Don't use this script if your history file is 1Gb (hope not it's not though:)
+
 
 # License
 GPLv3 or, at your option, any later version of the license.
