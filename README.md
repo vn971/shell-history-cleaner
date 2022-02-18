@@ -47,7 +47,7 @@ Make your bash history unlimited: [https://superuser.com/a/664061/162466](https:
 
 
 # Implementation details
-This program loads the file contents in memory. Don't use this script if your history file is 1Gb (hope not it's not though:)
+This program loads the file contents in memory. Don't use this script if your history file is 1Gb (hope it's not though:)
 
 
 # License
