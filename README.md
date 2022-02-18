@@ -43,7 +43,7 @@ OPTIONS:
 
 
 # Useful references
-* Make your bash history unlimited: [https://superuser.com/a/664061/162466](https://superuser.com/a/664061/162466)
+Make your bash history unlimited: [https://superuser.com/a/664061/162466](https://superuser.com/a/664061/162466)
 
 
 # Implementation details
@@ -51,4 +51,6 @@ This program loads the file contents in memory. Don't use this script if your hi
 
 
 # License
-GPLv3 or, at your option, any later version of the license.
+GPLv3 or, at your option, any later version of the license.  
+Main GitLab repo: [https://gitlab.com/vn971/shell-history-cleaner](https://gitlab.com/vn971/shell-history-cleaner)  
+Github mirror: [https://github.com/vn971/shell-history-cleaner](https://github.com/vn971/shell-history-cleaner)
