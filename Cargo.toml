@@ -10,8 +10,8 @@ keywords = ["shell", "bash", "cli"]
 
 [dependencies]
 lazy_static = "1.4.0"
-regex = "1.5.4"
-clap = { version = "3.0", features = ["derive"] }
+regex = "1.8.1"
+clap = { version = "3.2", features = ["derive"] }
 
 [profile.release]
 lto = true
