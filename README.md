@@ -37,7 +37,7 @@ OPTIONS:
             here: https://docs.rs/regex/latest/regex/#syntax
             
             Another real-life example:
-            '(ps aux.*|git checkout .*|git branch .*| .*|yt-dlp .*|chmod .*|echo .*|man .*)'
+            '(ps aux.*|git checkout .*|git branch .*| .*|yt-dlp .*|chmod .*|echo .*|man .*|rg .*)'
 
     -h, --help
             Print help information
