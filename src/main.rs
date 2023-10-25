@@ -39,6 +39,9 @@ fn main() {
     let mut lines_removed: u32 = 0;
     let mut lines_dedupplicated: u32 = 0;
 
+    // We iterate the lines of the file in reverse order to keep the _newest_ entries
+    // when de-duplicating, not the oldest ones.
+    // See also below.
     for line in file_as_string.lines().rev() {
         let (line_copy, value) = if let Some(old_key_value) = map.remove_entry(line) {
             old_key_value
@@ -55,8 +58,7 @@ fn main() {
         map.insert(line_copy, value + 1);
     }
 
-    // We reverse the file contents twice to keep the _newest_ entries
-    // when de-duplicating, not the oldest ones.
+    // Reverse the order of the lines back to the original (see also above).
     output.reverse();
 
     // create the new output file. This is not an atomic operation in the filesystem.
