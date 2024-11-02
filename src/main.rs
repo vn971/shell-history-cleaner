@@ -65,6 +65,8 @@ fn main() {
     let output_file = format!("{}.swap", target_file_name);
     std::fs::write(&output_file, output.join("\n"))
         .unwrap_or_else(|err| panic!("Error writing output, {}", err));
+    std::fs::write(&output_file, "\n")
+        .unwrap_or_else(|err| panic!("Error writing the final newline, {}", err));
 
     // move the old file to a backup name
     let unix_time = SystemTime::now()
